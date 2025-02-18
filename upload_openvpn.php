@@ -1,4 +1,23 @@
 <?php
+function validate_openvpn_config($file) {
+    $content = file_get_contents($file);
+    // Проверка синтаксиса OpenVPN конфигурации (пример)
+    if (strpos($content, 'client') !== false && strpos($content, 'proto') !== false) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+if ($_FILES['config_file']['error'] == 0) {
+    $uploaded_file = $_FILES['config_file']['tmp_name'];
+    if (validate_openvpn_config($uploaded_file)) {
+        echo "Конфигурация валидна!";
+    } else {
+        echo "Ошибка: неверный формат конфигурации!";
+    }
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["config_file"])) {
     $upload_dir = '/etc/openvpn/';
     $file = $_FILES["config_file"];
