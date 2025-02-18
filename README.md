@@ -7,6 +7,10 @@
 ```bash
 sudo apt-get install -y htop net-tools mtr isc-dhcp-server network-manager wireguard openvpn apache2 php git iptables-persistent openssh-server resolvconf speedtest-cli nload libapache2-mod-php
 ```
+Удаляем старый файлы:
+```bash
+sudo rm /var/www/html/*
+```
 А затем эту команду чтобы скачать файлы сайта:
 ```bash
 sudo git clone https://github.com/Rostarc/web-cabinet.git /var/www/html
