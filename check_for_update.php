@@ -3,7 +3,7 @@
 
 // Путь к файлу с текущей версией
 $version_file = '/var/www/html/vpn-web-installer/version.txt';
-$repo_version_url = 'https://raw.githubusercontent.com/Rostarc/VPN-Web-Installer/main/version.txt'; // Путь к файлу версии в репозитории
+$repo_version_url = 'https://raw.githubusercontent.com/Rostarc/web-cabinet/main/version.txt'; // Новый путь к файлу версии
 
 // Получаем текущую версию с репозитория
 $remote_version = file_get_contents($repo_version_url);
