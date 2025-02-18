@@ -36,6 +36,7 @@
 <!-- Липкая строка для статуса обновлений -->
 <div id="update-status" style="position: fixed; bottom: 10px; right: 10px; background-color: #333; color: white; padding: 10px; border-radius: 5px;">
     <span id="site-version">Загрузка...</span>
+    <a href="guide.php">Инструкция по настройке</a>
 </div>
 
 <script>
