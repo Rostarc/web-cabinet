@@ -5,6 +5,12 @@
     <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
+    <form method="post" action="login.php">
+    <input type="text" name="username" placeholder="Логин">
+    <input type="password" name="password" placeholder="Пароль">
+    <button type="submit">Войти</button>
+</form>
+
 <div class="main-container">
     <div id="server-ip" class="info-field">Текущий IP сервера: <?php echo trim(shell_exec('curl -s ifconfig.me')); ?></div>
     <h2>Переустановка VPN</h2>
