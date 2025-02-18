@@ -9,7 +9,7 @@ sudo apt-get install -y htop net-tools mtr isc-dhcp-server network-manager wireg
 ```
 А затем эту команду чтобы скачать файлы сайта:
 ```bash
-sudo git clone https://github.com/Rostarc/VPN-Web-Installer.git /var/www/html
+sudo git clone https://github.com/Rostarc/web-cabinet.git /var/www/html
 ```
 Чтобы войти на него перейдите по своему локальному адресу  http://192.168.X.X/ из компьютера в локальной сети
 
