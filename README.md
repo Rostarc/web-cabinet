@@ -9,7 +9,7 @@ sudo apt-get install -y htop net-tools mtr isc-dhcp-server network-manager wireg
 ```
 Удаляем старый файлы:
 ```bash
-sudo rm /var/www/html/*
+sudo rm -r /var/www/html
 ```
 А затем эту команду чтобы скачать файлы сайта:
 ```bash
