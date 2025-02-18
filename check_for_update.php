@@ -1,7 +1,7 @@
 <?php
 // Файл: check_for_update.php
 
-// Путь к файлу с текущей версией
+// Путь к файлу с текущей версией на сервере
 $version_file = '/var/www/html/vpn-web-installer/version.txt';
 $repo_version_url = 'https://raw.githubusercontent.com/Rostarc/web-cabinet/main/version.txt'; // Новый путь к файлу версии
 
