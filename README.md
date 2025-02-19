@@ -11,7 +11,7 @@ sudo apt-get install -y htop net-tools mtr isc-dhcp-server network-manager wireg
 ```bash
 sudo rm -r /var/www/html
 ```
-А затем эту команду чтобы скачать файлы сайта:
+Переходим в дерикторию и клонируем репозиторий
 ```bash
 cd /var/www/
 ```
