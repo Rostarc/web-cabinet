@@ -1,0 +1,138 @@
+/* /var/www/html/css/styles.css */
+
+/* Базовые стили страницы */
+body {
+    background-color: #222;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Шапка */
+header {
+    background-color: #333;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+}
+
+.header-logo {
+    display: flex;
+    align-items: center;
+}
+
+.header-logo img {
+    margin-right: 10px;
+}
+
+.header-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+/* Меню */
+.main-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    background-color: #444;
+}
+
+.main-nav li {
+    margin: 0;
+}
+
+.main-nav a {
+    display: block;
+    padding: 10px 15px;
+    color: #fff;
+    text-decoration: none;
+}
+
+.main-nav a:hover {
+    background-color: #555;
+}
+
+/* Основной контейнер */
+.main-container {
+    padding: 20px;
+}
+
+/* Футер */
+footer {
+    background-color: #333;
+    text-align: center;
+    color: #fff;
+    padding: 10px;
+    position: fixed; 
+    bottom: 0;
+    width: 100%;
+}
+
+.info-field {
+    background-color: #333;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    width: fit-content;
+}
+
+.container {
+    background-color: #333;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 45%; /* Увеличивает ширину контейнера */
+    margin: 0 2%; /* Добавляет отступы между контейнерами */
+    vertical-align: top;
+}
+
+h2, h3 {
+    margin: 10px 0;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+label {
+    margin-bottom: 5px;
+}
+
+input[type="file"] {
+    margin-bottom: 10px;
+}
+
+.green-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 5px;
+    width: 200px;
+    background-color: #4caf50;
+    color: white;
+}
+
+.green-button:hover {
+    background-color: #45a049;
+}
+
+.active-status {
+    color: green;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.inactive-status {
+    color: red;
+    font-weight: bold;
+    text-transform: uppercase;
+}
