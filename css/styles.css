@@ -136,3 +136,94 @@ input[type="file"] {
     font-weight: bold;
     text-transform: uppercase;
 }
+
+.main-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  background-color: #444;
+  justify-content: center; /* центрируем меню */
+}
+
+.main-nav li {
+  display: inline-flex; /* или flex */
+  align-items: center;
+  margin: 0 5px;
+}
+
+.main-nav li:not(:last-child)::after {
+  content: "|";
+  color: #fff;
+  display: inline-block;
+  vertical-align: center;
+  margin-left: 8px;
+  line-height: 1;
+}
+
+
+/* Универсальные стили для всех ссылок на сайте */
+a {
+  color: #fff;
+  text-decoration: none;
+}
+a:link {
+  color: #fff;
+}
+a:visited {
+  color: #fff; /* или любой другой цвет, например #eee */
+}
+a:hover {
+  color: #bbb; /* при наведении можно слегка менять цвет */
+}
+a:active {
+  color: #ccc;
+}
+
+.stat-line {
+    display: flex;
+    align-items: center;
+    margin: 8px 0;
+}
+
+.stat-line span {
+    margin-right: 8px;
+    font-weight: bold;
+}
+
+.resource-bar {
+    flex: 1;               /* полоса тянется на всю доступную ширину */
+    height: 16px;
+    background-color: #555;  /* цвет фона полосы */
+    border-radius: 4px;
+    margin-right: 8px;       /* небольшой отступ после */
+    position: relative;
+}
+
+.resource-fill {
+    height: 100%;
+    background-color: green; /* по умолчанию зеленая */
+    width: 0%;               /* начальное заполнение */
+    border-radius: 4px;
+    transition: width 0.3s ease, background-color 0.3s ease;
+    /* плавная анимация расширения и смены цвета */
+}
+
+.console-style {
+  background-color: #111;
+  color: #0f0; /* зеленый текст */
+  font-family: "Courier New", monospace;
+  padding: 10px;
+  height: 200px;
+  overflow-y: auto; /* скролл при переполнении */
+  border: 1px solid #444;
+  margin-bottom: 10px;
+}
+
+table, th, td {
+  border: 1px solid #555;
+}
+th, td {
+  padding: 5px;
+  text-align: left;
+}
