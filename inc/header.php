@@ -1,16 +1,40 @@
-<!-- /var/www/html/inc/header.php -->
+<?php
+// /var/www/html/inc/header.php
+$publicIp = trim(shell_exec('curl -s ifconfig.me'));
+?>
+<div style="
+  position:absolute;
+  top:22px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#333;
+  padding:5px 10px;
+  border-radius:4px;">
+    <span>IP: <?php echo htmlspecialchars($publicIp); ?></span>
+</div>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>VPN Management</title>
+    <title>VPN Panel</title>
     <link rel="icon" href="/favicon.png" type="image/png">
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
     <header>
         <div class="header-logo">
-            <img src="/logo.png" alt="Logo" height="40">
-            <span class="header-title">VPN Management Panel</span>
+            <a href="/">
+                <img src="/logo.png" alt="Logo" height="40">
+                <span class="header-title">VPN Panel</span>
+            </a>
         </div>
+        <!-- Навигация можно добавить здесь -->
     </header>
+
+<!-- Глобальный элемент для пинг-статуса (единственный на странице) -->
+<div id="ping-status" style="position: absolute; top: 22px; right: 20px; width: 200px; background-color: #333; padding: 8px; border-radius: 6px; text-align: center;">
+    Проверка пинга...
+</div>
+
+<!-- Подключаем скрипт для обновления глобального пинга -->
+<script src="/js/global_ping.js"></script>
