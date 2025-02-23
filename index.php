@@ -14,6 +14,9 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'home';
 
 // В зависимости от page подключаем нужный файл
 switch ($page) {
+    case 'home':
+        include 'inc/home.php';
+        break;
     case 'openvpn':
         include 'inc/openvpn.php';
         break;
@@ -33,9 +36,7 @@ switch ($page) {
         include 'inc/monitoring.php';
         break;
     default:
-        // страница "по умолчанию" или 404
-        echo "<h1>Главная страница</h1>";
-        echo "<p>Добро пожаловать в VPN-панель!</p>";
+        echo "<h1>404</h1><p>Страница не найдена.</p>";
         break;
 }
 
