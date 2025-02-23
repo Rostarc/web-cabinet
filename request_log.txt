@@ -1,7 +1,0 @@
-2025-02-22 14:40:35 Raw input: {"iface":"enp0s3","note":"проверка"}
-2025-02-22 14:40:35 Raw input: {"iface":"enp0s3","note":"проверка"}
-2025-02-22 14:40:38 Raw input: {"iface":"enp0s8","note":"работает"}
-2025-02-22 14:40:38 Raw input: {"iface":"enp0s8","note":"работает"}
-2025-02-22 14:40:58 Raw input: {"iface":"enp0s3","note":""}
-2025-02-22 14:49:07 Raw input: {"iface":"enp0s3","note":"проверка"}
-2025-02-22 14:49:07 Raw input: {"iface":"enp0s3","note":"проверка"}
