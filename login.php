@@ -1,43 +1,24 @@
 <?php
 session_start();
-
-// Если уже авторизованы — перенаправляем на главную
-if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
-    header("Location: index.php");
-    exit;
-}
-
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['username'] ?? '');
-    $password = $_POST['password'] ?? '';
+    $password = trim($_POST['password'] ?? '');
 
-    $htpasswd_file = '/etc/apache2/.htpasswd';
-    if (file_exists($htpasswd_file)) {
-        $lines = file($htpasswd_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        $found = false;
-        foreach ($lines as $line) {
-            // Формат: login:hash
-            list($user, $hash) = explode(":", $line, 2);
-            if ($user === $username) {
-                $found = true;
-                // Используем хэш как соль для crypt()
-                if (crypt($password, $hash) === $hash) {
-                    $_SESSION['logged_in'] = true;
-                    $_SESSION['username'] = $username;
-                    header("Location: index.php");
-                    exit;
-                } else {
-                    $error = "Неверный пароль";
-                }
-            }
-        }
-        if (!$found) {
-            $error = "Пользователь не найден";
-        }
+    // Здесь можно хранить данные пользователей (желательно в базе или в конфиге)
+    // Для простоты используем захардкоженные значения:
+    $validUsername = 'login';
+    $validPassword = 'yourpassword'; // Замените на свой пароль
+
+    // Если хотите использовать хэширование, например, password_hash() и password_verify()
+
+    if ($username === $validUsername && $password === $validPassword) {
+        $_SESSION['logged_in'] = true;
+        header('Location: index.php');
+        exit;
     } else {
-        $error = "Файл авторизации не найден";
+        $error = 'Неверное имя пользователя или пароль.';
     }
 }
 ?>
@@ -45,17 +26,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Авторизация</title>
+    <title>Вход в VPN Panel</title>
+    <link rel="stylesheet" href="/css/login.css">
 </head>
 <body>
-    <h1>Вход на сайт</h1>
-    <?php if ($error): ?>
-        <div style="color: red;"><?php echo htmlspecialchars($error); ?></div>
-    <?php endif; ?>
-    <form method="post" action="">
-        <label>Логин: <input type="text" name="username" required></label><br>
-        <label>Пароль: <input type="password" name="password" required></label><br>
-        <button type="submit">Войти</button>
-    </form>
+    <div class="login-container">
+        <h2>Вход в VPN Panel</h2>
+        <?php if ($error): ?>
+            <div class="error"><?= htmlspecialchars($error) ?></div>
+        <?php endif; ?>
+        <form method="post" action="login.php">
+            <input type="text" name="username" placeholder="Имя пользователя" required>
+            <input type="password" name="password" placeholder="Пароль" required>
+            <button type="submit">Войти</button>
+        </form>
+    </div>
 </body>
 </html>
