@@ -2,23 +2,27 @@
 session_start();
 $error = '';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = trim($_POST['username'] ?? '');
-    $password = trim($_POST['password'] ?? '');
-
-    // Здесь можно хранить данные пользователей (желательно в базе или в конфиге)
-    // Для простоты используем захардкоженные значения:
-    $validUsername = 'login';
-    $validPassword = 'yourpassword'; // Замените на свой пароль
-
-    // Если хотите использовать хэширование, например, password_hash() и password_verify()
-
-    if ($username === $validUsername && $password === $validPassword) {
-        $_SESSION['logged_in'] = true;
-        header('Location: index.php');
-        exit;
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = trim($_POST["username"]);
+    $password = trim($_POST["password"]);
+    
+    if (empty($username) || empty($password)) {
+        $error = "Введите имя пользователя и пароль.";
     } else {
-        $error = 'Неверное имя пользователя или пароль.';
+        // Формируем команду для проверки пароля
+        // Используем escapeshellarg для защиты от инъекций.
+        $command = "echo " . escapeshellarg($password) . " | su - " . escapeshellarg($username) . " -c 'id'";
+        exec($command, $output, $return_var);
+        
+        if ($return_var == 0) {
+            // Если команда прошла успешно, сохраняем переменные сессии и перенаправляем пользователя
+            $_SESSION["logged_in"] = true;
+            $_SESSION["username"] = $username;
+            header("Location: index.php");
+            exit();
+        } else {
+            $error = "Неверное имя пользователя или пароль.";
+        }
     }
 }
 ?>
@@ -36,8 +40,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="error"><?= htmlspecialchars($error) ?></div>
         <?php endif; ?>
         <form method="post" action="login.php">
-            <input type="text" name="username" placeholder="Имя пользователя" required>
-            <input type="password" name="password" placeholder="Пароль" required>
+            <label for="username">Пользователь:</label>
+            <input type="text" name="username" id="username" placeholder="Имя пользователя" required>
+            <label for="password">Пароль:</label>
+            <input type="password" name="password" id="password" placeholder="Пароль" required>
             <button type="submit">Войти</button>
         </form>
     </div>
