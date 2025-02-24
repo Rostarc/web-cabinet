@@ -43,6 +43,9 @@ if (!isset($_SESSION["logged_in"]) || $_SESSION["logged_in"] !== true) {
         case 'monitoring':
             include 'inc/monitoring.php';
             break;
+        case 'filemanager':
+          include 'inc/filemanager.php';
+          break;
         default:
             echo "<h1>404</h1><p>Страница не найдена.</p>";
             break;
