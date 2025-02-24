@@ -46,42 +46,58 @@
 <div class="main-container">
   <h2 style="text-align:center;">Логи</h2>
   
-  <!-- Раздел "Последние входы в систему" -->
-  <div class="log-section" id="log-logins">
-    <div class="log-title">Последние входы в систему</div>
-    <div>
-      <button class="toggle-view-button" onclick="toggleView('logins', 'readable')">Понятный вид</button>
-      <button class="toggle-view-button" onclick="toggleView('logins', 'extended')">Расширенный вид</button>
-    </div>
-    <pre class="log-content" id="logins-readable" style="display: none;">
+<!-- Раздел "Последние входы в систему" -->
+<div class="log-section" id="log-logins">
+  <div class="log-title">Последние входы в систему</div>
+  <div>
+    <button class="toggle-view-button" onclick="toggleView('logins', 'readable')">Понятный вид</button>
+    <button class="toggle-view-button" onclick="toggleView('logins', 'extended')">Расширенный вид</button>
+  </div>
+  <pre class="log-content" id="logins-readable" style="display: none;">
 <?php
 // Получаем сырой лог входов (команда last -n 20)
 $raw_logins = shell_exec('last -n 20');
-// Преобразуем в понятный вид
+// Преобразуем в понятный вид и сортируем по времени
 $lines = explode("\n", trim($raw_logins));
+$entries = array();
+
 foreach ($lines as $line) {
     if (empty($line)) continue;
     // Пример строки: "qwerty   pts/0        Sat Feb 22 14:02 - crash  (05:21)     192.168.1.101"
     if (preg_match('/^(\S+)\s+\S+\s+(\w+\s+\w+\s+\d+\s+\d+:\d+)\s+\-\s+(\S+)\s+\(([^)]+)\)\s*(\S+)?/', $line, $m)) {
         $user = $m[1];
-        $time = $m[2];
+        $timeStr = $m[2];
         $statusField = $m[3];
         $duration = $m[4];
         $ip = isset($m[5]) ? $m[5] : "через терминал сервера";
         $status = (stripos($statusField, "crash") !== false) ? "не удачно" : "удачно";
-        echo "[Вход $time] Логин - $user, статус: $status, IP - $ip\n";
+        // Получаем временную метку (если год не указан, strtotime попытается использовать текущий год)
+        $timestamp = strtotime($timeStr);
+        $entries[] = array(
+            'timestamp' => $timestamp,
+            'output' => "[Вход $timeStr] Логин - $user, статус: $status, IP - $ip"
+        );
     } else {
-        echo $line."\n";
+        $entries[] = array('timestamp' => 0, 'output' => $line);
     }
 }
+
+// Сортировка по времени (новейшие первыми)
+usort($entries, function($a, $b) {
+    return $b['timestamp'] - $a['timestamp'];
+});
+
+foreach ($entries as $entry) {
+    echo $entry['output'] . "\n";
+}
 ?>
-    </pre>
-    <pre class="log-content" id="logins-extended">
+  </pre>
+  <pre class="log-content" id="logins-extended">
 <?php
 echo $raw_logins;
 ?>
-    </pre>
-  </div>
+  </pre>
+</div>
   
   <!-- Раздел "DHCP Лог" -->
   <div class="log-section">
