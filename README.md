@@ -5,7 +5,7 @@
 # Установка
 Чтобы установить локальный сайт на сервер введите сначала:
 ```bash
-sudo apt-get install -y htop net-tools mtr isc-dhcp-server network-manager wireguard openvpn apache2 php git iptables-persistent openssh-server resolvconf speedtest-cli nload libapache2-mod-php
+sudo wget https://raw.githubusercontent.com/Rostarc/VPN-Setup-Script/main/VPN-Setup-Ubuntu20.04-22.04.sh -O VPN-Setup-Ubuntu20.04-22.04.sh && sudo bash VPN-Setup-Ubuntu20.04-22.04.sh
 ```
 Удаляем старый файлы:
 ```bash
