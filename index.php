@@ -1,5 +1,9 @@
-<?php require 'auth_check.php'; ?>
 <?php
+session_start();
+if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+    header('Location: login.php');
+    exit;
+}
 // /var/www/html/index.php
 require_once 'config.php'; // Подключаем конфиг
 
