@@ -1,3 +1,4 @@
+<?php require 'auth_check.php'; ?>
 <?php
 // /var/www/html/index.php
 require_once 'config.php'; // Подключаем конфиг
