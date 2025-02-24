@@ -23,12 +23,13 @@ $publicIp = trim(shell_exec('curl -s ifconfig.me'));
 <body>
     <header>
         <div class="header-logo">
-            <a href="/">
-                <img src="/logo.png" alt="Logo" height="40">
-                <span class="header-title">VPN Panel</span>
-            </a>
+            <a href="/"><img src="/logo.png" alt="Logo" height="40"></a>
+            <span class="header-title">VPN Panel</span>
         </div>
-        <!-- Навигация можно добавить здесь -->
+        <!-- Кнопка для выхода -->
+        <div style="position: absolute; top: 22px; right: 20px;">
+            <a href="logout.php" style="color: #fff; text-decoration: none;">Выйти</a>
+        </div>
     </header>
 
 <!-- Глобальный элемент для пинг-статуса (единственный на странице) -->
