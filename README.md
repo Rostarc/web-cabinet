@@ -3,7 +3,7 @@
 # Установка
 Чтобы установить локальный сайт на сервер введите сначала (устанавливается через другой скрипт):
 ```bash
-sudo wget https://raw.githubusercontent.com/Rostarc/VPN-Setup-Script/main/VPN-Setup-Ubuntu20.04-22.04.sh -O VPN-Setup-Ubuntu20.04-22.04.sh && sudo bash VPN-Setup-Ubuntu20.04-22.04.sh
+wget https://raw.githubusercontent.com/Rostarc/vpn/main/vpn.sh -O vpn.sh && sudo bash vpn.sh
 ```
 Удаляем старый файлы:
 ```bash
