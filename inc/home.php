@@ -65,26 +65,30 @@ function formatStatus($status) {
     </div>
 </div>
 
-<!-- НЕ ВСТАВЛЯЕМ сюда элемент #ping-status, он уже есть в header.php -->
-
-<div id="system-stats">
-    <h2>Система:</h2>
-    <div class="stat-line">
+<!-- Новый блок системных показателей -->
+<div id="system-stats-new" class="system-stats-new">
+    <h2>Системные показатели</h2>
+    <div class="stat-item">
         <span>CPU:</span>
-        <div class="resource-bar"><div class="resource-fill" id="cpu-bar"></div></div>
-        <span id="cpu-val">0%</span>
+        <div class="progress-bar">
+            <div id="cpu-progress" class="progress-fill" style="width:0%;">0%</div>
+        </div>
     </div>
-    <div class="stat-line">
+    <div class="stat-item">
         <span>RAM:</span>
-        <div class="resource-bar"><div class="resource-fill" id="ram-bar"></div></div>
-        <span id="ram-val">0%</span>
+        <div class="progress-bar">
+            <div id="ram-progress" class="progress-fill" style="width:0%;">0%</div>
+        </div>
     </div>
-    <div class="stat-line">
+    <div class="stat-item">
         <span>Disk:</span>
-        <div class="resource-bar"><div class="resource-fill" id="disk-bar"></div></div>
-        <span id="disk-val">0 / 0</span>
+        <div class="progress-bar">
+            <div id="disk-progress" class="progress-fill" style="width:0%;">0 / 0</div>
+        </div>
     </div>
 </div>
+
+</style>
 
 <h2 style="text-align:center; margin-top:20px;">
     Сетевые интерфейсы
