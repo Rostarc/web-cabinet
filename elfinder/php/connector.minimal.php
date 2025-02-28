@@ -29,6 +29,8 @@ error_reporting(0); // Set E_ALL for debuging
 // define('ELFINDER_IMAGEMAGICK_PS', true);
 // ===============================================
 
+require_once $_SERVER['DOCUMENT_ROOT'].'/auth_check.php';
+
 // // load composer autoload before load elFinder autoload If you need composer
 // // You need to run the composer command in the php directory.
 is_readable('./vendor/autoload.php') && require './vendor/autoload.php';
