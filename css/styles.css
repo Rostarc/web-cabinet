@@ -237,3 +237,42 @@ th, td {
     color: #fff;
     margin: 0 2px;
 }
+
+<style>
+  .system-stats-new {
+      margin: 20px auto;
+      max-width: 600px;
+      padding: 15px;
+      background: #f7f7f7;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  .system-stats-new h2 {
+      text-align: center;
+      margin-bottom: 15px;
+  }
+  .system-stats-new .stat-item {
+      margin-bottom: 10px;
+  }
+  .system-stats-new .stat-item span {
+      display: inline-block;
+      width: 60px;
+      font-weight: bold;
+  }
+  .system-stats-new .progress-bar {
+      display: inline-block;
+      width: calc(100% - 70px);
+      background: #ddd;
+      border-radius: 4px;
+      overflow: hidden;
+      vertical-align: middle;
+  }
+  .system-stats-new .progress-fill {
+      height: 20px;
+      line-height: 20px;
+      background: #4caf50;
+      color: #fff;
+      text-align: center;
+      transition: width 0.5s ease-in-out;
+  }
+</style>
