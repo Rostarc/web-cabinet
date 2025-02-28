@@ -227,3 +227,13 @@ th, td {
   padding: 5px;
   text-align: left;
 }
+
+.key {
+    background: #444;
+    border: 1px solid #666;
+    border-radius: 3px;
+    padding: 2px 4px;
+    font-family: monospace;
+    color: #fff;
+    margin: 0 2px;
+}
