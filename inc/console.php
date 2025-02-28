@@ -12,28 +12,6 @@ echo "<h2>Веб-консоль сервера</h2>";
 
 <iframe id="shellFrame" src="/shell/" width="100%" height="600"></iframe>
 
-<!-- Подсказки для горячих клавиш, постоянно видимые -->
-<div id="consoleHelp" style="margin-top:15px; padding:10px; background:#f9f9f9; border:1px solid #ccc;">
-  <h4>Подсказки по горячим клавишам</h4>
-  <ul style="list-style:none; padding:0; margin:0;">
-    <li><span class="key">Ctrl</span> + <span class="key">Shift</span> + <span class="key">V</span> — Вставить скопированный текст</li>
-    <li><span class="key">Ctrl</span> + <span class="key">Shift</span> + <span class="key">C</span> — Копировать текст</li>
-    <!-- Можно добавить и другие комбинации, например: -->
-    <!-- <li><span class="key">Ctrl</span> + <span class="key">L</span> — Очистить консоль</li> -->
-  </ul>
-</div>
-
-<style>
-  .key {
-    background: #fff;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    padding: 2px 4px;
-    font-family: monospace;
-    margin: 0 2px;
-  }
-</style>
-
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const bgPicker = document.getElementById('bgColorPicker');
@@ -86,3 +64,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 </script>
+
+<!-- Подсказки для консоли -->
+<div id="consoleHelp" style="margin-top:15px; padding:10px; background:#333; border:1px solid #555; color:#fff; border-radius:4px;">
+  <h4>Горячие клавиши</h4>
+  <ul style="list-style:none; padding:0; margin:0;">
+    <li><span class="key">Ctrl</span> + <span class="key">Shift</span> + <span class="key">V</span> — Вставить скопированный текст</li>
+    <li><span class="key">Ctrl</span> + <span class="key">Shift</span> + <span class="key">C</span> — Копировать текст</li>
+  </ul>
+  <h4 style="margin-top:10px;">Подсказки по командам</h4>
+  <ul style="list-style:disc; padding-left:20px; margin:0;">
+    <li><span class="key">Ctrl</span> + <span class="key">K</span> — удалить целую строку</li>
+    <li><span class="key">Ctrl</span> + <span class="key">W</span> — поиск по тексту в файле</li>
+    <li><span class="key">Ctrl</span> + <span class="key">X</span> — выйти из файла</li>
+    <li>Полезные команды для администрирования: <span class="key">nload</span> <span class="key">speedtest</span>, <span class="key">ifconfig -a</span>, <span class="key">arp -a</span></li>
+    <br>
+  </ul>
+</div>
+
