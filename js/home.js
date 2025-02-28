@@ -12,6 +12,48 @@ document.addEventListener('DOMContentLoaded', function() {
     initPingHistoryFilter();
 });
 
+function updateSystemStatsNew() {
+    fetch('/scripts/ajax_sysinfo.php')
+        .then(response => response.json())
+        .then(data => {
+            // Ожидается, что data содержит: cpu, ram, diskUsed, diskTotal
+            let cpuVal = parseFloat(data.cpu);
+            let ramVal = parseFloat(data.ram);
+
+            // Для диска: если diskTotal содержит буквы (например, "100G"), parseFloat вернёт число до буквы.
+            let diskUsed = parseFloat(data.diskUsed);
+            let diskTotal = parseFloat(data.diskTotal);
+            let diskPerc = diskTotal ? Math.round((diskUsed / diskTotal) * 100) : 0;
+
+            // Обновляем CPU
+            const cpuProgress = document.getElementById('cpu-progress');
+            if (cpuProgress) {
+                cpuProgress.style.width = cpuVal + '%';
+                cpuProgress.textContent = cpuVal + '%';
+            }
+
+            // Обновляем RAM
+            const ramProgress = document.getElementById('ram-progress');
+            if (ramProgress) {
+                ramProgress.style.width = ramVal + '%';
+                ramProgress.textContent = ramVal + '%';
+            }
+
+            // Обновляем Disk
+            const diskProgress = document.getElementById('disk-progress');
+            if (diskProgress) {
+                diskProgress.style.width = diskPerc + '%';
+                diskProgress.textContent = diskUsed + ' / ' + data.diskTotal;
+            }
+        })
+        .catch(err => console.error('Ошибка получения системной информации:', err));
+}
+
+
+// Запускаем обновление каждые 10 секунд и вызываем сразу при загрузке
+setInterval(updateSystemStatsNew, 10000);
+updateSystemStatsNew();
+
 // ===== Инициализация комбинированного графика =====
 function initCombinedChart() {
     // Элемент <canvas id="chartCombined"> должен присутствовать в HTML
