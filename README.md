@@ -5,6 +5,8 @@
 ```bash
 wget https://raw.githubusercontent.com/Rostarc/vpn/main/vpn.sh -O vpn.sh && sudo bash vpn.sh
 ```
+
+Но если вдруг вы хотите проигнорировать создание нужных файлов, назначение прав и прочее тогда можно сделать вот так.
 Удаляем старый файлы:
 ```bash
 sudo rm -r /var/www/html
