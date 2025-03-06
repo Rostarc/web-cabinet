@@ -152,8 +152,8 @@ $opts = array(
 		// Items volume
 		array(
 			'driver'        => 'LocalFileSystem',           // driver for accessing file system (REQUIRED)
-			'path'          => '/home',                 // path to files (REQUIRED)
-			'URL'           => dirname($_SERVER['PHP_SELF']) . '/home', // URL to files (REQUIRED)
+			'path'          => '/home/files',                 // path to files (REQUIRED)
+			'URL'           => dirname($_SERVER['PHP_SELF']) . '/home/files', // URL to files (REQUIRED)
 			'trashHash'     => 't1_Lw',                     // elFinder's hash of trash folder
 			'winHashFix'    => DIRECTORY_SEPARATOR !== '/', // to make hash same to Linux one on windows too
 			'accessControl' => 'access'                     // disable and hide dot starting files (OPTIONAL)
@@ -162,8 +162,8 @@ $opts = array(
 		array(
 			'id'            => '1',
 			'driver'        => 'Trash',
-			'path'          => '/home/.trash',
-			'tmbURL'        => dirname($_SERVER['PHP_SELF']) . '/home/.trash/.tmb/',
+			'path'          => '/home/files/.trash',
+			'tmbURL'        => dirname($_SERVER['PHP_SELF']) . '/home/home/files.trash/.tmb/',
 			'winHashFix'    => DIRECTORY_SEPARATOR !== '/', // to make hash same to Linux one on windows too
 			'accessControl' => 'access',                    // Same as above
 		),
