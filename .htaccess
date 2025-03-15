@@ -1,0 +1,18 @@
+<RequireAll>
+    Require ip 192.168
+</RequireAll>
+
+RewriteEngine On
+RewriteBase /
+
+# Исключаем каталог elfinder из перенаправлений
+RewriteCond %{REQUEST_URI} ^/elfinder/ [NC]
+RewriteRule .* - [L]
+
+# Если запрошен существующий файл или каталог — не перенаправляем
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Перенаправляем все остальные запросы на index.php с параметром page
+RewriteRule ^(.*)$ index.php?page=$1 [QSA,L]
