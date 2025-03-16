@@ -35,9 +35,6 @@ if (!isset($_SESSION["logged_in"]) || $_SESSION["logged_in"] !== true) {
         case 'logs':
             include 'inc/logs.php';
             break;
-        case 'update':
-            include 'inc/update.php';
-            break;
         case 'console':
             include 'inc/console.php';
             break;
