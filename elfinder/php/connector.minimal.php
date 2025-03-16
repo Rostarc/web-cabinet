@@ -163,7 +163,7 @@ $opts = array(
 			'id'            => '1',
 			'driver'        => 'Trash',
 			'path'          => '/home/files/.trash',
-			'tmbURL'        => dirname($_SERVER['PHP_SELF']) . '/home/home/files/.trash/.tmb/',
+			'tmbURL'        => dirname($_SERVER['PHP_SELF']) . '/home/files/.trash/.tmb/',
 			'winHashFix'    => DIRECTORY_SEPARATOR !== '/', // to make hash same to Linux one on windows too
 			'accessControl' => 'access',                    // Same as above
 		),
