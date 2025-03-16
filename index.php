@@ -20,7 +20,7 @@ if (!isset($_SESSION["logged_in"]) || $_SESSION["logged_in"] !== true) {
     include 'inc/header.php';
     include 'inc/navigation.php';
     echo '<div class="main-container">';
-    
+
     $page = isset($_GET['page']) ? $_GET['page'] : 'home';
     switch ($page) {
         case 'home':
@@ -40,6 +40,9 @@ if (!isset($_SESSION["logged_in"]) || $_SESSION["logged_in"] !== true) {
             break;
         case 'console':
             include 'inc/console.php';
+            break;
+        case 'network':
+            include 'inc/network.php';
             break;
         case 'monitoring':
             include 'inc/monitoring.php';
