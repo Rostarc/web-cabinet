@@ -111,6 +111,14 @@
     <canvas id="cpuChart" style="max-width: 800px; height: 400px; margin: 0 auto;"></canvas>
 
     <h2>Тест скорости интернета</h2>
+    <div style="font-size: 0.8em; color: #ccc; margin-bottom: 10px;">
+  Что такое Jitter?
+  <span 
+    style="cursor: help; color: #4caf50; font-weight: bold; border: 1px solid #4caf50; border-radius: 50%; padding: 2px 5px; margin-left: 5px;"
+    title="Jitter – это показатель нестабильности задержки пакетов в сети. Он измеряет, насколько варьируется время, за которое пакеты достигают получателя. Чем ниже значение Jitter, тем стабильнее соединение. Например, при пинге 60-70 мс приемлемым считается Jitter ниже 5 мс.">
+    ?
+  </span>
+</div>
     <iframe src="/speedtest/" width="900" height="380" frameborder="0" style="margin: 0 auto; display: block;"></iframe>
 
     <!-- Таблица сетевых I/O метрик -->
