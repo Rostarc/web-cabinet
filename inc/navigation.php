@@ -7,6 +7,7 @@
         <li><a href="/logs">Логи</a></li>
         <li><a href="/update">Обновление</a></li>
         <li><a href="/console">Консоль</a></li>
+        <li><a href="/network">Сеть</a></li>
         <li><a href="/filemanager">Файловый менеджер</a></li>
     </ul>
 </nav>
