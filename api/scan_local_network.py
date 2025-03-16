@@ -2,8 +2,9 @@
 import subprocess
 import json
 import re
+import os
 
-def scan_network(interface='enp0s8'):
+def scan_network(interface):
     try:
         # Запускаем arp-scan для указанного интерфейса
         result = subprocess.run(['sudo', 'arp-scan', '--interface=' + interface, '--localnet'],
@@ -11,7 +12,7 @@ def scan_network(interface='enp0s8'):
         output = result.stdout
     except Exception as e:
         return {"error": str(e)}
-
+    
     devices = []
     # Пример строки: "192.168.1.10    00:11:22:33:44:55    Some Vendor Inc."
     pattern = re.compile(r'(\d+\.\d+\.\d+\.\d+)\s+([0-9a-f:]+)\s+(.*)')
@@ -25,7 +26,9 @@ def scan_network(interface='enp0s8'):
     return {"devices": devices}
 
 if __name__ == '__main__':
-    data = scan_network('enp0s8')  # замените на нужный интерфейс
+    # Используем переменную окружения OUT_IF, если она не задана, по умолчанию "enp0s8"
+    interface = os.environ.get("OUT_IF", "enp0s8")
+    data = scan_network(interface)
     output_file = "/var/www/html/data/local_network.json"
     with open(output_file, "w") as f:
         json.dump(data, f)

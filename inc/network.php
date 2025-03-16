@@ -2,184 +2,223 @@
 // inc/network.php - вывод метрик с динамическим обновлением через AJAX polling
 ?>
 <div class="container" style="text-align:center; margin: 0 auto; max-width: 1000px;">
-    <h1>Сеть</h1>
-    <p>Обновлено: <span id="updateTime">Загрузка...</span></p>
+  <h1>Сеть</h1>
+  <p>Обновлено: <span id="updateTime">Загрузка...</span></p>
 
-    <!-- Селектор сетевого интерфейса -->
-    <div style="margin: 10px auto; text-align: center;">
-        <label for="ifaceSelect">Выберите сетевой интерфейс:</label>
-        <select id="ifaceSelect"></select>
+  <!-- Селектор сетевого интерфейса -->
+  <div style="margin: 10px auto; text-align: center;">
+    <label for="ifaceSelect">Выберите сетевой интерфейс:</label>
+    <select id="ifaceSelect"></select>
+  </div>
+
+  <!-- Кнопка для перезагрузки служб сбора статистики -->
+  <div style="text-align:center; margin: 20px 0;">
+    <button id="restartServicesButton" class="refresh-button">
+      Перезагрузить службы сбора статистики
+    </button>
+  </div>
+
+  <!-- Блок для отображения результата перезагрузки (модальное окно) -->
+  <div id="restartResult" style="display:none; position:fixed; top:20%; left:50%; transform:translateX(-50%); width:80%; max-width:600px; background:#fff; color:#000; border:2px solid #4caf50; border-radius:8px; padding:20px; z-index:1000;">
+    <h3 style="margin-top:0;">Результат перезагрузки</h3>
+    <pre id="restartLog" style="max-height:300px; overflow:auto; background:#eee; padding:10px; border-radius:4px;"></pre>
+    <div style="text-align:right; margin-top:10px;">
+      <button onclick="closeRestartResult();" style="padding:5px 15px; font-size:14px;">Закрыть</button>
     </div>
+  </div>
 
-<!-- Кнопка для перезагрузки служб сбора статистики -->
-<div style="text-align:center; margin: 20px 0;">
-  <button id="restartServicesButton" class="refresh-button">
-    Перезагрузить службы сбора статистики
-  </button>
+  <!-- CSS для кнопки (можно вынести в отдельный CSS файл) -->
+  <style>
+    #restartServicesButton {
+      background-color: #4caf50;
+      color: #000;
+      font-size: 16px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      cursor: pointer;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    #restartServicesButton:hover {
+      background-color: #45a049;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+    #restartServicesButton:disabled {
+      background-color: #aaa;
+      box-shadow: none;
+      cursor: default;
+    }
+  </style>
+
+  <script>
+    const restartButton = document.getElementById("restartServicesButton");
+    const restartResult = document.getElementById("restartResult");
+    const restartLog = document.getElementById("restartLog");
+
+    restartButton.addEventListener("click", function() {
+      // При нажатии кнопка становится неактивной (серой)
+      restartButton.disabled = true;
+      restartButton.style.backgroundColor = "#aaa";
+      restartButton.textContent = "Перезагрузка...";
+
+      // Выполняем AJAX-запрос к restart_services.php
+      fetch("/api/restart_services.php")
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("Ошибка " + response.status);
+          }
+          return response.json();
+        })
+        .then(data => {
+          let logText = "";
+          if (data.status === "success") {
+            data.results.forEach(result => {
+              logText += `Команда: ${result.command}\nВывод: ${result.output}\n\n`;
+            });
+          } else {
+            logText = "Ошибка при перезагрузке служб: " + (data.message || "");
+          }
+          restartLog.textContent = logText;
+          // Показываем модальное окно с результатами
+          restartResult.style.display = "block";
+        })
+        .catch(error => {
+          restartLog.textContent = "Ошибка: " + error;
+          restartResult.style.display = "block";
+        });
+    });
+
+    function closeRestartResult() {
+      restartResult.style.display = "none";
+      // Возвращаем кнопку в исходное состояние после закрытия окна
+      restartButton.disabled = false;
+      restartButton.style.backgroundColor = "#4caf50";
+      restartButton.textContent = "Перезагрузить службы сбора статистики";
+    }
+  </script>
+
+  <!-- График нагрузки сети (данные из network_load.json, за 1 час) -->
+  <h2>График нагрузки сети (за 1 час)</h2>
+  <canvas id="networkLoadChart" style="max-width: 800px; height: 400px; margin: 0 auto;"></canvas>
+
+  <!-- График загрузки CPU -->
+  <h2>График загрузки CPU</h2>
+  <canvas id="cpuChart" style="max-width: 800px; height: 400px; margin: 0 auto;"></canvas>
+
+  <h2>Тест скорости интернета</h2>
+  <div style="font-size: 0.8em; color: #ccc; margin-bottom: 10px;">
+    Что такое Jitter?
+    <span
+      style="cursor: help; color: #4caf50; font-weight: bold; border: 1px solid #4caf50; border-radius: 50%; padding: 2px 5px; margin-left: 5px;"
+      title="Jitter – это показатель нестабильности задержки пакетов в сети. Он измеряет, насколько варьируется время, за которое пакеты достигают получателя. Чем ниже значение Jitter, тем стабильнее соединение. Например, при пинге 60-70 мс приемлемым считается Jitter ниже 5 мс.">
+      ?
+    </span>
+  </div>
+  <iframe src="/speedtest/" width="900" height="380" frameborder="0" style="margin: 0 auto; display: block;"></iframe>
+
+  <!-- Таблица сетевых I/O метрик -->
+  <h2>Сетевые I/O метрики</h2>
+  <table id="networkTable" border="1" cellpadding="5" cellspacing="0" style="width:100%; margin: 0 auto; border-collapse: collapse;">
+    <thead>
+      <tr style="background: #444; color:#fff;">
+        <th>Интерфейс</th>
+        <th>Передано байт</th>
+        <th>Принято байт</th>
+        <th>Пакетов отправлено</th>
+        <th>Пакетов получено</th>
+        <th title="Ошибки (входящие): количество ошибок при получении пакетов. Нормальное значение – 0.">Ошибки (входящие)</th>
+        <th title="Ошибки (исходящие): количество ошибок при отправке пакетов. Нормальное значение – 0.">Ошибки (исходящие)</th>
+        <th title="Пакетов дропнуто (входящие). Зеленый: 0, красный: >1%">Пакетов дропнуто (входящие)</th>
+        <th title="Пакетов дропнуто (исходящие). Зеленый: 0, красный: >1%">Пакетов дропнуто (исходящие)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Данные будут заполнены динамически -->
+    </tbody>
+  </table>
+
+  <!-- Таблица статуса сетевых интерфейсов -->
+  <h2>Статус сетевых интерфейсов</h2>
+  <table id="networkStatusTable" border="1" cellpadding="5" cellspacing="0" style="width:60%; margin: 0 auto; border-collapse: collapse;">
+    <thead>
+      <tr style="background: #444; color:#fff;">
+        <th>Интерфейс</th>
+        <th>Состояние</th>
+        <th>Пропускная способность (Мбит/с)</th>
+        <th>MTU</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Данные будут заполнены динамически -->
+    </tbody>
+  </table>
+
+  <!-- Раздел для отображения локальной сети с ограничением по количеству устройств -->
+  <h2>Локальная сеть</h2>
+  <p>
+    Количество устройств:
+    <span id="localNetworkCount" title="Это приблизительное число. Фактическое количество может варьироваться из-за особенностей сканирования, временных задержек и особенностей сети.">
+      0
+    </span>
+  </p>
+<!-- Поле для фильтрации -->
+<div style="text-align:center; margin: 10px 0;">
+  <label for="localFilterInput" style="font-size: 0.9em; color: #ccc;">Поиск по IP, MAC, Производитель:</label>
+ <input type="text" id="localFilterInput" style="padding:5px; font-size: 0.9em;">
+<p style="font-size: 0.8em; color: #ccc; margin-top: 5px;">
+  Нажми на "Показать все", чтобы фильтровать по столбикам.
+</p>
 </div>
 
-<!-- Блок для отображения результата перезагрузки (модальное окно) -->
-<div id="restartResult" style="display:none; position:fixed; top:20%; left:50%; transform:translateX(-50%); width:80%; max-width:600px; background:#fff; color:#000; border:2px solid #4caf50; border-radius:8px; padding:20px; z-index:1000;">
-  <h3 style="margin-top:0;">Результат перезагрузки</h3>
-  <pre id="restartLog" style="max-height:300px; overflow:auto; background:#eee; padding:10px; border-radius:4px;"></pre>
-  <div style="text-align:right; margin-top:10px;">
-    <button onclick="closeRestartResult();" style="padding:5px 15px; font-size:14px;">Закрыть</button>
+<!-- Таблица локальной сети (видимые устройства) -->
+<div style="width:80%; margin: 0 auto; border: 1px solid #444; border-collapse: collapse; position: relative;">
+  <table id="localNetworkTable" border="1" cellpadding="5" cellspacing="0" style="width:100%; border-collapse: collapse;">
+    <thead>
+      <tr style="background: #444; color: #fff;">
+        <th>Устройство</th>
+        <th>IP-адрес</th>
+        <th>MAC-адрес</th>
+        <th>Производитель</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Данные заполняются JavaScript -->
+    </tbody>
+  </table>
+  <div id="showAllContainer" style="margin-top: 10px; text-align: right; display: none;">
+    <button id="showAllButton" style="padding: 5px 10px; font-size: 14px;">Показать все</button>
   </div>
 </div>
 
-<!-- CSS для кнопки (можно вынести в отдельный CSS файл) -->
-<style>
-  #restartServicesButton {
-    background-color: #4caf50;
-    color: #000;
-    font-size: 16px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-    cursor: pointer;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  }
-  #restartServicesButton:hover {
-    background-color: #45a049;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-  }
-  #restartServicesButton:disabled {
-    background-color: #aaa;
-    box-shadow: none;
-    cursor: default;
-  }
-</style>
-
-<script>
-  const restartButton = document.getElementById("restartServicesButton");
-  const restartResult = document.getElementById("restartResult");
-  const restartLog = document.getElementById("restartLog");
-
-  restartButton.addEventListener("click", function() {
-    // При нажатии кнопка становится неактивной (серой)
-    restartButton.disabled = true;
-    restartButton.style.backgroundColor = "#aaa";
-    restartButton.textContent = "Перезагрузка...";
-
-    // Выполняем AJAX-запрос к restart_services.php
-    fetch("/api/restart_services.php")
-      .then(response => {
-        if (!response.ok) {
-          throw new Error("Ошибка " + response.status);
-        }
-        return response.json();
-      })
-      .then(data => {
-        let logText = "";
-        if (data.status === "success") {
-          data.results.forEach(result => {
-            logText += `Команда: ${result.command}\nВывод: ${result.output}\n\n`;
-          });
-        } else {
-          logText = "Ошибка при перезагрузке служб: " + (data.message || "");
-        }
-        restartLog.textContent = logText;
-        // Показываем модальное окно с результатами
-        restartResult.style.display = "block";
-      })
-      .catch(error => {
-        restartLog.textContent = "Ошибка: " + error;
-        restartResult.style.display = "block";
-      })
-      .finally(() => {
-        // Не возвращаем кнопку в исходное состояние здесь,
-        // а только при закрытии модального окна (функция closeRestartResult)
-      });
-  });
-
-  function closeRestartResult() {
-    restartResult.style.display = "none";
-    // Возвращаем кнопку в исходное состояние после закрытия окна
-    restartButton.disabled = false;
-    restartButton.style.backgroundColor = "#4caf50";
-    restartButton.textContent = "Перезагрузить службы сбора статистики";
-  }
-</script>
-
-    <!-- График нагрузки сети (данные из network_load.json, за 1 час) -->
-    <h2>График нагрузки сети (за 1 час)</h2>
-    <canvas id="networkLoadChart" style="max-width: 800px; height: 400px; margin: 0 auto;"></canvas>
-
-    <!-- График загрузки CPU -->
-    <h2>График загрузки CPU</h2>
-    <canvas id="cpuChart" style="max-width: 800px; height: 400px; margin: 0 auto;"></canvas>
-
-    <h2>Тест скорости интернета</h2>
-    <div style="font-size: 0.8em; color: #ccc; margin-bottom: 10px;">
-  Что такое Jitter?
-  <span 
-    style="cursor: help; color: #4caf50; font-weight: bold; border: 1px solid #4caf50; border-radius: 50%; padding: 2px 5px; margin-left: 5px;"
-    title="Jitter – это показатель нестабильности задержки пакетов в сети. Он измеряет, насколько варьируется время, за которое пакеты достигают получателя. Чем ниже значение Jitter, тем стабильнее соединение. Например, при пинге 60-70 мс приемлемым считается Jitter ниже 5 мс.">
-    ?
-  </span>
+<!-- Модальное окно для полного списка устройств -->
+<div id="fullLocalDevicesModal" style="display: none; position: fixed; top: 10%; left: 50%; transform: translateX(-50%); width: 80%; max-width: 800px; max-height: 80vh; background: #fff; color: #000; border: 2px solid #4caf50; border-radius: 8px; padding: 20px; overflow-y: auto; z-index: 1000;">
+  <h3 style="margin-top:0;">Полный список локальных устройств</h3>
+  <table id="fullLocalNetworkTable" border="1" cellpadding="5" cellspacing="0" style="width:100%; border-collapse: collapse;">
+    <thead>
+      <tr style="background: #444; color: #fff;">
+        <th>Устройство</th>
+        <th>IP-адрес</th>
+        <th>MAC-адрес</th>
+        <th>Производитель</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Данные заполняются JavaScript -->
+    </tbody>
+  </table>
+  <div style="text-align: right; margin-top: 10px;">
+    <button onclick="document.getElementById('fullLocalDevicesModal').style.display='none';" style="padding: 5px 10px; font-size: 14px;">Закрыть</button>
+  </div>
 </div>
-    <iframe src="/speedtest/" width="900" height="380" frameborder="0" style="margin: 0 auto; display: block;"></iframe>
 
-    <!-- Таблица сетевых I/O метрик -->
-    <h2>Сетевые I/O метрики</h2>
-    <table id="networkTable" border="1" cellpadding="5" cellspacing="0" style="width:100%; margin: 0 auto; border-collapse: collapse;">
-        <thead>
-            <tr style="background: #444; color:#fff;">
-                <th>Интерфейс</th>
-                <th>Передано байт</th>
-                <th>Принято байт</th>
-                <th>Пакетов отправлено</th>
-                <th>Пакетов получено</th>
-                <th title="Ошибки (входящие): количество ошибок при получении пакетов. Нормальное значение – 0.">Ошибки (входящие)</th>
-                <th title="Ошибки (исходящие): количество ошибок при отправке пакетов. Нормальное значение – 0.">Ошибки (исходящие)</th>
-                <th title="Пакетов дропнуто (входящие). Зеленый: 0, красный: >1%">Пакетов дропнуто (входящие)</th>
-                <th title="Пакетов дропнуто (исходящие). Зеленый: 0, красный: >1%">Пакетов дропнуто (исходящие)</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Данные будут заполнены динамически -->
-        </tbody>
-    </table>
-
-    <!-- Таблица статуса сетевых интерфейсов -->
-    <h2>Статус сетевых интерфейсов</h2>
-    <table id="networkStatusTable" border="1" cellpadding="5" cellspacing="0" style="width:60%; margin: 0 auto; border-collapse: collapse;">
-        <thead>
-            <tr style="background: #444; color:#fff;">
-                <th>Интерфейс</th>
-                <th>Состояние</th>
-                <th>Пропускная способность (Мбит/с)</th>
-                <th>MTU</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Данные будут заполнены динамически -->
-        </tbody>
-    </table>
-
-    <!-- Раздел для отображения локальной сети -->
-    <h2>Локальная сеть</h2>
-    <p>Количество устройств: <span id="localNetworkCount">0</span></p>
-    <div style="width:80%; margin: 0 auto; max-height:400px; overflow-y:auto; border: 1px solid #444; border-collapse: collapse;">
-        <table id="localNetworkTable" border="1" cellpadding="5" cellspacing="0" style="width:100%; border-collapse: collapse;">
-            <thead>
-                <tr style="background: #444; color: #fff;">
-                    <th>Устройство</th>
-                    <th>IP-адрес</th>
-                    <th>MAC-адрес</th>
-                    <th>Производитель</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Данные будут заполнены динамически -->
-            </tbody>
-        </table>
-    </div>
-</div>
 
 <!-- Подключаем Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Подключаем наш файл с дополнительным кодом для работы с локальной сетью -->
+<script src="/js/local_network.js"></script>
+
+<!-- Остальной JS код для обновления метрик и графиков -->
 <script>
 /* Функция для форматирования байтов с сокращением и подсказкой */
 function formatBytesValue(bytes) {
