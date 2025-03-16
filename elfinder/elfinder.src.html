@@ -126,6 +126,22 @@
 
 	<!-- elfinder initialization  -->
 	<script>
+
+$(function() {
+    $('#elfinder').elfinder({
+        height: '90%',  // или можно задать конкретное число, например, 600
+        cssAutoLoad : false,
+        baseUrl : './',
+        url : 'php/connector.minimal.php',
+        getFileCallback : function(file) {
+            // ...
+        }
+    },
+    function(fm, extraObj) {
+        // ваши колбэки...
+    });
+});
+
 		$(function() {
 			$('#elfinder').elfinder(
 				// 1st Arg - options
