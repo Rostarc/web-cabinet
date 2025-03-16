@@ -11,6 +11,97 @@
         <select id="ifaceSelect"></select>
     </div>
 
+<!-- Кнопка для перезагрузки служб сбора статистики -->
+<div style="text-align:center; margin: 20px 0;">
+  <button id="restartServicesButton" class="refresh-button">
+    Перезагрузить службы сбора статистики
+  </button>
+</div>
+
+<!-- Блок для отображения результата перезагрузки (модальное окно) -->
+<div id="restartResult" style="display:none; position:fixed; top:20%; left:50%; transform:translateX(-50%); width:80%; max-width:600px; background:#fff; color:#000; border:2px solid #4caf50; border-radius:8px; padding:20px; z-index:1000;">
+  <h3 style="margin-top:0;">Результат перезагрузки</h3>
+  <pre id="restartLog" style="max-height:300px; overflow:auto; background:#eee; padding:10px; border-radius:4px;"></pre>
+  <div style="text-align:right; margin-top:10px;">
+    <button onclick="closeRestartResult();" style="padding:5px 15px; font-size:14px;">Закрыть</button>
+  </div>
+</div>
+
+<!-- CSS для кнопки (можно вынести в отдельный CSS файл) -->
+<style>
+  #restartServicesButton {
+    background-color: #4caf50;
+    color: #000;
+    font-size: 16px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  #restartServicesButton:hover {
+    background-color: #45a049;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  }
+  #restartServicesButton:disabled {
+    background-color: #aaa;
+    box-shadow: none;
+    cursor: default;
+  }
+</style>
+
+<script>
+  const restartButton = document.getElementById("restartServicesButton");
+  const restartResult = document.getElementById("restartResult");
+  const restartLog = document.getElementById("restartLog");
+
+  restartButton.addEventListener("click", function() {
+    // При нажатии кнопка становится неактивной (серой)
+    restartButton.disabled = true;
+    restartButton.style.backgroundColor = "#aaa";
+    restartButton.textContent = "Перезагрузка...";
+
+    // Выполняем AJAX-запрос к restart_services.php
+    fetch("/api/restart_services.php")
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Ошибка " + response.status);
+        }
+        return response.json();
+      })
+      .then(data => {
+        let logText = "";
+        if (data.status === "success") {
+          data.results.forEach(result => {
+            logText += `Команда: ${result.command}\nВывод: ${result.output}\n\n`;
+          });
+        } else {
+          logText = "Ошибка при перезагрузке служб: " + (data.message || "");
+        }
+        restartLog.textContent = logText;
+        // Показываем модальное окно с результатами
+        restartResult.style.display = "block";
+      })
+      .catch(error => {
+        restartLog.textContent = "Ошибка: " + error;
+        restartResult.style.display = "block";
+      })
+      .finally(() => {
+        // Не возвращаем кнопку в исходное состояние здесь,
+        // а только при закрытии модального окна (функция closeRestartResult)
+      });
+  });
+
+  function closeRestartResult() {
+    restartResult.style.display = "none";
+    // Возвращаем кнопку в исходное состояние после закрытия окна
+    restartButton.disabled = false;
+    restartButton.style.backgroundColor = "#4caf50";
+    restartButton.textContent = "Перезагрузить службы сбора статистики";
+  }
+</script>
+
     <!-- График нагрузки сети (данные из network_load.json, за 1 час) -->
     <h2>График нагрузки сети (за 1 час)</h2>
     <canvas id="networkLoadChart" style="max-width: 800px; height: 400px; margin: 0 auto;"></canvas>
