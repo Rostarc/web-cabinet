@@ -16,7 +16,7 @@ sudo rm -r /var/www/html
 cd /var/www/
 ```
 ```bash
-sudo git clone https://github.com/Rostarc/web-cabinet.git /var/www/html
+sudo git clone https://github.com/vpn-vendor/web-cabinet.git /var/www/html
 ```
 Чтобы войти на него перейдите по своему локальному адресу  http://192.168.X.X/ из компьютера в локальной сети
 
