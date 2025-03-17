@@ -3,7 +3,7 @@
 # Установка
 Чтобы установить локальный сайт на сервер введите сначала (устанавливается через другой скрипт):
 ```bash
-wget https://raw.githubusercontent.com/Rostarc/vpn/main/vpn.sh -O vpn.sh && sudo bash vpn.sh
+wget https://raw.githubusercontent.com/vpn-vendor/vpn/main/vpn.sh -O vpn.sh && sudo bash vpn.sh
 ```
 
 Но если вдруг вы хотите проигнорировать создание нужных файлов, назначение прав и прочее тогда можно сделать вот так.
