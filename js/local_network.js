@@ -1,11 +1,11 @@
-// js/local_network.js
+// js/local_network.js (обновлённая версия)
 (function() {
   // Глобальная переменная для хранения полного списка устройств
   let fullDevices = [];
   // Объект для хранения текущего состояния сортировки
   let currentSort = { field: null, ascending: true };
 
-  // Если функция getDeviceIcon ещё не определена в глобальной области, определяем её
+  // Функция для определения иконки устройства по строке производителя
   function getDeviceIcon(vendor) {
     const vendorLower = vendor.toLowerCase();
     if (vendorLower.includes("router") || vendorLower.includes("tplink") || vendorLower.includes("netgear") ||
@@ -166,6 +166,31 @@
     });
   }
 
+  // Обработчик кнопки для принудительного сканирования локальной сети
+  function setupForceScanButton() {
+    const forceButton = document.getElementById('forceScanButton');
+    if (forceButton) {
+      forceButton.addEventListener('click', function() {
+        forceButton.disabled = true;
+        forceButton.textContent = "Сканирование...";
+        fetch('/api/scan_local_network.py')
+          .then(response => {
+            // Независимо от ответа, считаем, что сканирование запущено
+            forceButton.disabled = false;
+            forceButton.textContent = "Запустить сканирование локальной сети";
+            fetchLocalNetworkDevices();
+            alert("Сканирование выполнено.");
+          })
+          .catch(error => {
+            console.error("Ошибка при выполнении сканирования:", error);
+            forceButton.disabled = false;
+            forceButton.textContent = "Запустить сканирование локальной сети";
+            alert("Ошибка при выполнении сканирования.");
+          });
+      });
+    }
+  }
+
   // Первоначальная настройка – вызывается при загрузке документа
   document.addEventListener('DOMContentLoaded', function() {
     fetchLocalNetworkDevices();
@@ -173,8 +198,9 @@
     setupCloseModal();
     setupFilterInput();
     setupSorting();
-    // Обновлять список каждые 5 минут (по необходимости)
-    setInterval(fetchLocalNetworkDevices, 5 * 60 * 1000);
+    setupForceScanButton();
+    // Обновлять список каждые 6 часов (6 * 60 * 60 * 1000 мс)
+    setInterval(fetchLocalNetworkDevices, 6 * 60 * 60 * 1000);
   });
 
   // Для отладки можно вызвать window.refreshLocalNetworkDevices()

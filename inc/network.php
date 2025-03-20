@@ -171,6 +171,10 @@
 </p>
 </div>
 
+<div style="text-align:center; margin-top:10px;">
+  <button id="forceScanButton" style="padding: 5px 10px; font-size: 14px;">Запустить сканирование локальной сети</button>
+</div>
+
 <!-- Таблица локальной сети (видимые устройства) -->
 <div style="width:80%; margin: 0 auto; border: 1px solid #444; border-collapse: collapse; position: relative;">
   <table id="localNetworkTable" border="1" cellpadding="5" cellspacing="0" style="width:100%; border-collapse: collapse;">
@@ -546,7 +550,7 @@ document.addEventListener('DOMContentLoaded', function() {
     fetchMetrics();
 
     // Запускаем опрос локальной сети каждые 5 минут
-    setInterval(fetchLocalNetwork, 5 * 60 * 1000);
+    setInterval(fetchLocalNetwork, 6 * 60 * 60 * 1000); // 6 часов
     fetchLocalNetwork();
 });
 </script>
