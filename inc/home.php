@@ -89,37 +89,7 @@ function formatStatus($status) {
 </div>
 
 </style>
-
-<h2 style="text-align:center; margin-top:20px;">
-    Сетевые интерфейсы
-    <span id="toggle-ifaces" style="cursor:pointer; font-size:0.9em;">[+]</span>
-</h2>
-<div id="interfaces-table" style="display:none; margin-bottom:20px;">
-    <table style="border-collapse: collapse; width:80%; margin: 0 auto;">
-        <tr style="background: #444;">
-            <th>№</th>
-            <th>Интерфейс</th>
-            <th>MAC-адрес</th>
-            <th>Айпи IPv4</th>
-            <th>Айпи IPv6</th>
-        </tr>
-        <tr style="border-bottom:1px solid #555;">
-            <td>1</td>
-            <td>enp0s3</td>
-            <td>08:00:27:e4:6f:80</td>
-            <td>10.0.2.15/24</td>
-            <td>fe80::a00:27ff:fee4:6f80/64</td>
-        </tr>
-        <tr style="border-bottom:1px solid #555;">
-            <td>2</td>
-            <td>enp0s8</td>
-            <td>08:00:27:d0:95:bd</td>
-            <td>192.168.1.105/24</td>
-            <td>fe80::a00:27ff:fed0:95bd/64</td>
-        </tr>
-    </table>
-</div>
-
+    
 <!-- Комбинированный график для мониторинга системы -->
 <h2 style="text-align:center; margin-top:40px;">Мониторинг системы</h2>
 <canvas id="chartCombined" style="display:block; margin:0 auto; max-width:900px; height:400px;"></canvas>
