@@ -43,7 +43,9 @@ if (!$uptimeStr) {
 $ovpnStatus = trim(shell_exec('systemctl is-active openvpn@client1 2>/dev/null'));
 $wgStatus   = trim(shell_exec('systemctl is-active wg-quick@tun0 2>/dev/null'));
 function formatStatus($status) {
-    return ($status === 'active') ? "<span style='color:lime;'>Активен</span>" : "<span style='color:red;'>Выключен</span>";
+    return ($status === 'active')
+        ? "<span style='color:lime;'>Активен</span>"
+        : "<span style='color:red;'>Выключен</span>";
 }
 ?>
 
@@ -57,10 +59,12 @@ function formatStatus($status) {
     <h2>VPN-сервисы:</h2>
     <div style="display:flex; justify-content:center; gap:40px;">
         <div>
-            <a href="/openvpn">OpenVPN</a>: <?php echo formatStatus($ovpnStatus); ?>
+            <a href="/openvpn">OpenVPN</a>:
+            <?php echo formatStatus($ovpnStatus); ?>
         </div>
         <div>
-            <a href="/wireguard">WireGuard</a>: <?php echo formatStatus($wgStatus); ?>
+            <a href="/wireguard">WireGuard</a>:
+            <?php echo formatStatus($wgStatus); ?>
         </div>
     </div>
 </div>
@@ -88,30 +92,41 @@ function formatStatus($status) {
     </div>
 </div>
 
-</style>
-    
-<!-- Комбинированный график для мониторинга системы -->
+<!-- Заголовок для Highcharts -->
 <h2 style="text-align:center; margin-top:40px;">Мониторинг системы</h2>
-<canvas id="chartCombined" style="display:block; margin:0 auto; max-width:900px; height:400px;"></canvas>
 
-<!-- Фильтр по времени для истории пинга -->
+<!-- Блок фильтра по времени и сброса зума -->
 <div style="text-align:center; margin-bottom:10px;">
-    <label for="selectRange">Период:</label>
-    <select id="selectRange">
-        <option value="300">Последние 5 минут</option>
-        <option value="900">15 минут</option>
-        <option value="1800">30 минут</option>
-        <option value="3600" selected>1 час</option>
-        <option value="10800">3 часа</option>
-        <option value="86400">24 часа</option>
-    </select>
-    <button id="btnRangeApply">Показать</button>
-</div>
+  <label for="selectRange">Период:</label>
+  <select id="selectRange">
+    <option value="300">5 минут</option>
+    <option value="1800">30 минут</option>
+    <option value="3600" selected>1 час</option>
+    <option value="21600">6 часов</option>
+    <option value="86400">24 часа</option>
+  </select>
+  <button id="btnApplyRange">Применить</button>
 
-<!-- Подключение внешних скриптов -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Сам график -->
+<div id="chartCombined" style="max-width:900px; height:400px; margin: 0 auto;"></div>
+
+<!-- Подключаем библиотеки Highcharts -->
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<!-- (Дополнительно) <script src="https://code.highcharts.com/highcharts-more.js"></script> -->
+
+<!-- Скрипт с логикой Highcharts (home_highcharts.js) -->
+<script src="/js/home_highcharts.js"></script>
+
+<!-- Скрипт со старыми прогресс-барами и пингом (home.js) -->
 <script src="/js/home.js"></script>
+
+<!-- (Опционально) Подключение chart.js, если нужно -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
+// Раскрытие/скрытие таблицы Сетевые интерфейсы
 document.addEventListener('DOMContentLoaded', function() {
     const toggleBtn = document.getElementById('toggle-ifaces');
     const tableDiv = document.getElementById('interfaces-table');
@@ -130,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
 
     <footer>
-        <span>© 2025 VPN Panel v1.0</span>
+        <span>© 2025 VPN Panel v2.4.0</span>
         &nbsp;|&nbsp;
         <a href="https://t.me/vpn_vendor" target="_blank">
             Поддержка в Telegram
